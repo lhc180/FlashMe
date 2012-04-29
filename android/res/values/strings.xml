@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FlashMe</string>
+    <string name="flashme_button">Flash Me</string>
+    <string name="flashyou_button">Flash You</string>
+    <string name="qrcode_defaultdescription">Touch the screen to generate your QRCode</string>
+</resources>
