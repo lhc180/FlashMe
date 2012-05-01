@@ -14,10 +14,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.AsyncFacebookRunner.RequestListener;
@@ -79,7 +77,7 @@ public class FlashMeActivity extends Activity {
         FileOutputStream fos = null;
         try {
           fos = openFileOutput(FILE_NAME, MODE_PRIVATE);
-          ImageWriter.writeToStream(result, Bitmap.CompressFormat.JPEG, 100, fos);
+          ImageWriter.writeToStream(result, Bitmap.CompressFormat.PNG, 100, fos);
           fos.close();
 
           FileInputStream fis = openFileInput(FILE_NAME);

@@ -1,1 +1,10 @@
 fb_test_user.txt
+*.png
+.classpath
+.project
+.settings
+bin
+gen
+local.properties
+proguard-project.txt
+target
