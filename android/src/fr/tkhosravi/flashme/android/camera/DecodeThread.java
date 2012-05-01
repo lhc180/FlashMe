@@ -18,14 +18,16 @@ import com.google.zxing.Result;
 import com.google.zxing.common.GlobalHistogramBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
 
+import fr.tkhosravi.flashme.R;
+
 public class DecodeThread extends Thread {
-  
+
   final private String TAG = "DecodeThread"; 
-  
+
   private Handler m_handler;
   private Camera m_camera;
   private Handler mainHandler;
-  
+
   public DecodeThread(Handler handler, Camera camera) {
     m_camera = camera;
     mainHandler = handler;
@@ -33,57 +35,70 @@ public class DecodeThread extends Thread {
 
   public void run() {
     Looper.prepare();
-    
+
     m_handler = new Handler(new DecodeCallback(m_camera));
-    
+
     Looper.loop();
   }
   
+  public void stopLoop() {
+    Looper.myLooper().quit();
+  }
+
   private class DecodeCallback implements Callback {
-    
+
     private boolean decoded = false;
     private Camera m_camera;
-    
+
     public DecodeCallback(Camera camera) {
       m_camera = camera;
     }
 
     public boolean handleMessage(Message msg) {
-      if(decoded == false) {
-        byte[] data = (byte[]) msg.obj;
-        Size size = m_camera.getParameters().getPreviewSize();
-        LuminanceSource src = new CameraLuminanceSource(data, size.width, size.height);
-        Binarizer binarizer = new GlobalHistogramBinarizer(src);
-        BinaryBitmap binaryBitmap = new BinaryBitmap(binarizer);
-        QRCodeReader qrCodeReader = new QRCodeReader();
-        Result result = null;
-        try {
-          result = qrCodeReader.decode(binaryBitmap);
-        } catch (NotFoundException e) {
-          Log.e(TAG, "QRCode not found");
-        } catch (ChecksumException e) {
-          Log.e(TAG, "QRCode checksum exception");
-        } catch (FormatException e) {
-          Log.e(TAG, "QRCode format exception");
+      switch(msg.what){
+      case(R.integer.frame):
+        if(decoded == false) {
+          byte[] data = (byte[]) msg.obj;
+          Size size = m_camera.getParameters().getPreviewSize();
+          LuminanceSource src = new CameraLuminanceSource(data, size.width, size.height);
+          Binarizer binarizer = new GlobalHistogramBinarizer(src);
+          BinaryBitmap binaryBitmap = new BinaryBitmap(binarizer);
+          QRCodeReader qrCodeReader = new QRCodeReader();
+          Result result = null;
+          try {
+            result = qrCodeReader.decode(binaryBitmap);
+          } catch (NotFoundException e) {
+            Log.e(TAG, "QRCode not found");
+          } catch (ChecksumException e) {
+            Log.e(TAG, "QRCode checksum exception");
+          } catch (FormatException e) {
+            Log.e(TAG, "QRCode format exception");
+          }
+          Message newMsg = Message.obtain();
+          if(result != null) {
+            decoded = true;
+            newMsg.obj = result.getText();
+            mainHandler.sendMessage(newMsg);
+            decoded = true;
+          }
         }
-        Message newMsg = Message.obtain();
-        if(result != null) {
-          decoded = true;
-          newMsg.obj = "QRCode decoded";
-        }
-        else
-          newMsg.obj = "QRCode not found";
-        
-        mainHandler.sendMessage(newMsg);
+      break;
+      case(R.integer.reset):
+        decoded = false;
+      break;
+      case(R.integer.stop):
+        decoded = false;
+        Looper.myLooper().quit();
+      break;
       }
       return false;
     }
-    
+
   }
 
   public Handler getHandler() {
     return m_handler;
   }
-  
+
 
 }

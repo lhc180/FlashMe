@@ -1,14 +1,3 @@
 FlashMe app (for Android)
 
 Based on the Google ZXing library and the Facebook Android API
-
-TODO:
-Design for the application
-Add a Preference Activity
-Implement the Facebook disconnection
-Custom the QRCode with colors
-Save the QRCode as an image for the Gallery
-Share the QRCode
-Store several QRCodes
-Integrates a webview for adding friend instead of opening the browser (the current Facebook Android SDK doesn't support FBDialog for adding friends yet)
-Integrates the multiqrcode reader

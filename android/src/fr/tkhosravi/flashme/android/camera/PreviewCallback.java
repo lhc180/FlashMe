@@ -1,9 +1,8 @@
 package fr.tkhosravi.flashme.android.camera;
 
+import fr.tkhosravi.flashme.R;
 import android.hardware.Camera;
-import android.os.Handler;
 import android.os.Message;
-import fr.tkhosravi.flashme.android.FlashYouActivity;
 
 public class PreviewCallback implements android.hardware.Camera.PreviewCallback {
 
@@ -18,6 +17,7 @@ public class PreviewCallback implements android.hardware.Camera.PreviewCallback 
   public void onPreviewFrame(byte[] data, Camera camera) {
     Message msg = Message.obtain();
     msg.obj = data;
+    msg.what = R.integer.frame;
     m_decodeThread.getHandler().sendMessage(msg);
   }
 
