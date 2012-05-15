@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="frame">0</integer>
+    <integer name="reset">1</integer>
+    <integer name="stop">2</integer>  
+</resources>
